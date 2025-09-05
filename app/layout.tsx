@@ -1,4 +1,3 @@
-import { ModeToggle } from "@/components/ModeToggle";
 import { ThemeProvider } from "@/components/theme-provider";
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
@@ -22,16 +21,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} antialiased`}>
+      <body className={`${geistSans.variable} antialiased relative`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <div className="fixed top-10 right-10">
-            <ModeToggle />
-          </div>
           {children}
         </ThemeProvider>
       </body>
