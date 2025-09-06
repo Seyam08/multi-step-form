@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+
 import {
   Command,
   CommandEmpty,
@@ -37,12 +38,17 @@ import { skillsByDepartment } from "@/mock-data/skills";
 import { stepTwoSchema } from "@/schemas/stepTwo";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
+import {
+  CalendarIcon,
+  Check,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChevronsUpDown,
+} from "lucide-react";
 import { FieldValues, useForm } from "react-hook-form";
 import z from "zod";
 import { Input } from "../../ui/input";
 import { Slider } from "../../ui/slider";
-import NextPrev from "../NextPrev";
 
 const departmentList = Object.keys(skillsByDepartment);
 
@@ -51,6 +57,7 @@ export default function StepTwo<T extends FieldValues>() {
   const form = useForm<z.infer<typeof stepTwoSchema>>({
     resolver: zodResolver(stepTwoSchema),
     defaultValues: {
+      position: "",
       startDate: new Date(),
       salaryExpt: 0,
     },
@@ -351,11 +358,23 @@ export default function StepTwo<T extends FieldValues>() {
             />
             {/* Salary Expectation end  */}
           </div>
+          {/* next and prev button  start*/}
+          <div className="flex justify-between my-5">
+            <Button variant="outline" size="sm" className="uppercase">
+              <ChevronLeftIcon /> prev
+            </Button>
+            <Button
+              type="submit"
+              variant="outline"
+              size="sm"
+              className="uppercase"
+            >
+              <ChevronRightIcon /> next
+            </Button>
+          </div>
+          {/* next and prev button  end*/}
         </form>
       </Form>
-      {/* next and prev button  start*/}
-      <NextPrev />
-      {/* next and prev button  end*/}
     </>
   );
 }

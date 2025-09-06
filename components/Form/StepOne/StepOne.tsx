@@ -19,12 +19,11 @@ import { cn } from "@/lib/utils";
 import { stepOneSchema } from "@/schemas/stepOne";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { JSX } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { Input } from "../../ui/input";
-import NextPrev from "../NextPrev";
 
 export default function StepOne(): JSX.Element {
   const form = useForm<z.infer<typeof stepOneSchema>>({
@@ -168,11 +167,23 @@ export default function StepOne(): JSX.Element {
             />
             {/* Picture end  */}
           </div>
+          {/* next and prev button  start*/}
+          <div className="flex justify-between my-5">
+            <Button variant="outline" size="sm" className="uppercase">
+              <ChevronLeftIcon /> prev
+            </Button>
+            <Button
+              type="submit"
+              variant="outline"
+              size="sm"
+              className="uppercase"
+            >
+              <ChevronRightIcon /> next
+            </Button>
+          </div>
+          {/* next and prev button  end*/}
         </form>
       </Form>
-      {/* next and prev button  start*/}
-      <NextPrev />
-      {/* next and prev button  end*/}
     </>
   );
 }
