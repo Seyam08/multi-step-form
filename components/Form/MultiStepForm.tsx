@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,36 +8,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Form } from "@/components/ui/form";
 import { Progress } from "@/components/ui/progress";
-import { multiStepFormSchema } from "@/schemas/multiStepFormSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { JSX } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import NextPrev from "./NextPrev";
-import StepOne from "./StepOne";
-import StepTwo from "./StepTwo";
+import StepOne from "./StepOne/StepOne";
+import StepTwo from "./StepTwo/StepTwo";
 
 export default function MultiStepForm(): JSX.Element {
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof multiStepFormSchema>>({
-    resolver: zodResolver(multiStepFormSchema),
-    defaultValues: {
-      fullName: "",
-      email: "",
-      phone: "",
-      position: "",
-      dateOfBirth: new Date(),
-      startDate: new Date(),
-      salaryExpt: 0,
-    },
-  });
-
-  function onSubmit(values: z.infer<typeof multiStepFormSchema>) {
-    console.log(values);
-  }
-
   return (
     <Card className="w-full md:max-w-3xl 2xl:max-w-5xl">
       <CardContent>
@@ -51,36 +26,9 @@ export default function MultiStepForm(): JSX.Element {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="max-w-full mx-auto"
-          >
-            <StepOne
-              form={form}
-              fullName="fullName"
-              email="email"
-              phone="phone"
-              dateOfBirth="dateOfBirth"
-              profilePic="profilePic"
-            />
-            <StepTwo
-              form={form}
-              department="department"
-              position="position"
-              startDate="startDate"
-              jobType="jobType"
-              salaryExpt="salaryExpt"
-              manager="manager"
-            />
+        <StepOne />
 
-            {/* next and prev button  start*/}
-            <NextPrev />
-            {/* next and prev button  end*/}
-
-            <Button type="submit">Submit</Button>
-          </form>
-        </Form>
+        <StepTwo />
       </CardContent>
       <CardFooter className="flex-col gap-2">
         {/* <Button type="submit" className="w-full">
@@ -89,15 +37,6 @@ export default function MultiStepForm(): JSX.Element {
         <Button variant="outline" className="w-full">
           Login with Google
         </Button> */}
-        <div>
-          {Object.entries(form.formState.errors).map(([field, error]) =>
-            error?.message ? (
-              <div key={field} style={{ color: "red" }}>
-                {field}: {error.message as string}
-              </div>
-            ) : null
-          )}
-        </div>
       </CardFooter>
     </Card>
   );
