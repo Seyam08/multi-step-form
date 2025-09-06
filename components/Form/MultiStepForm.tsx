@@ -3,37 +3,30 @@
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 import { Progress } from "@/components/ui/progress";
 import { multiStepFormSchema } from "@/schemas/multiStepFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { JSX } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import StepOne from "./StepOne";
 
 export default function MultiStepForm(): JSX.Element {
   // 1. Define your form.
   const form = useForm<z.infer<typeof multiStepFormSchema>>({
     resolver: zodResolver(multiStepFormSchema),
     defaultValues: {
-      username: "",
+      fullName: "",
       email: "",
+      phone: "",
+      dateOfBirth: new Date(),
     },
   });
 
@@ -47,51 +40,24 @@ export default function MultiStepForm(): JSX.Element {
         <Progress value={40} />
       </CardContent>
       <CardHeader>
-        <CardTitle>Login to your account</CardTitle>
+        <CardTitle>First step - Personal Info</CardTitle>
         <CardDescription>
-          Enter your email below to login to your account
+          These personal information is required for the process
         </CardDescription>
-        <CardAction>
-          <Button variant="link">Sign Up</Button>
-        </CardAction>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="max-w-full mx-auto space-y-5"
+            className="max-w-full mx-auto"
           >
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input placeholder="shadcn" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="shadcn" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    This is your public display email.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
+            <StepOne
+              form={form}
+              fullName="fullName"
+              email="email"
+              phone="phone"
+              dateOfBirth="dateOfBirth"
+              profilePic="profilePic"
             />
             <Button type="submit">Submit</Button>
           </form>
