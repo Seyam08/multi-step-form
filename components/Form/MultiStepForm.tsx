@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import NextPrev from "./NextPrev";
 import StepOne from "./StepOne";
+import StepTwo from "./StepTwo";
 
 export default function MultiStepForm(): JSX.Element {
   // 1. Define your form.
@@ -27,7 +28,10 @@ export default function MultiStepForm(): JSX.Element {
       fullName: "",
       email: "",
       phone: "",
+      position: "",
       dateOfBirth: new Date(),
+      startDate: new Date(),
+      salaryExpt: 0,
     },
   });
 
@@ -60,18 +64,40 @@ export default function MultiStepForm(): JSX.Element {
               dateOfBirth="dateOfBirth"
               profilePic="profilePic"
             />
+            <StepTwo
+              form={form}
+              department="department"
+              position="position"
+              startDate="startDate"
+              jobType="jobType"
+              salaryExpt="salaryExpt"
+              manager="manager"
+            />
+
+            {/* next and prev button  start*/}
             <NextPrev />
+            {/* next and prev button  end*/}
+
             <Button type="submit">Submit</Button>
           </form>
         </Form>
       </CardContent>
       <CardFooter className="flex-col gap-2">
-        <Button type="submit" className="w-full">
+        {/* <Button type="submit" className="w-full">
           Login
         </Button>
         <Button variant="outline" className="w-full">
           Login with Google
-        </Button>
+        </Button> */}
+        <div>
+          {Object.entries(form.formState.errors).map(([field, error]) =>
+            error?.message ? (
+              <div key={field} style={{ color: "red" }}>
+                {field}: {error.message as string}
+              </div>
+            ) : null
+          )}
+        </div>
       </CardFooter>
     </Card>
   );
