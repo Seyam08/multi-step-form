@@ -10,6 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -23,7 +24,6 @@ import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { JSX } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { Input } from "../../ui/input";
 
 export default function StepOne(): JSX.Element {
   const form = useForm<z.infer<typeof stepOneSchema>>({

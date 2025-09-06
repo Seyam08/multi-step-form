@@ -1,5 +1,9 @@
 "use client";
 
+import StepFour from "@/components/Form/StepFour/StepFour";
+import StepOne from "@/components/Form/StepOne/StepOne";
+import StepThree from "@/components/Form/StepThree/StepThree";
+import StepTwo from "@/components/Form/StepTwo/StepTwo";
 import {
   Card,
   CardContent,
@@ -10,9 +14,6 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { JSX } from "react";
-import StepOne from "./StepOne/StepOne";
-import StepThree from "./StepThree/StepThree";
-import StepTwo from "./StepTwo/StepTwo";
 
 export default function MultiStepForm(): JSX.Element {
   return (
@@ -30,6 +31,7 @@ export default function MultiStepForm(): JSX.Element {
         <StepOne />
         <StepTwo />
         <StepThree />
+        <StepFour />
       </CardContent>
       <CardFooter className="flex-col gap-2">
         {/* <Button type="submit" className="w-full">
