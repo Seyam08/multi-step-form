@@ -19,6 +19,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -32,6 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import { mockManagers } from "@/mock-data/mockManagers";
 import { skillsByDepartment } from "@/mock-data/skills";
@@ -45,15 +47,13 @@ import {
   ChevronRightIcon,
   ChevronsUpDown,
 } from "lucide-react";
-import { FieldValues, useForm } from "react-hook-form";
+import { JSX } from "react";
+import { useForm } from "react-hook-form";
 import z from "zod";
-import { Input } from "../../ui/input";
-import { Slider } from "../../ui/slider";
 
 const departmentList = Object.keys(skillsByDepartment);
 
-export default function StepTwo<T extends FieldValues>() {
-  // 1. Define your form.
+export default function StepTwo(): JSX.Element {
   const form = useForm<z.infer<typeof stepTwoSchema>>({
     resolver: zodResolver(stepTwoSchema),
     defaultValues: {

@@ -11,6 +11,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { JSX } from "react";
 import StepOne from "./StepOne/StepOne";
+import StepThree from "./StepThree/StepThree";
 import StepTwo from "./StepTwo/StepTwo";
 
 export default function MultiStepForm(): JSX.Element {
@@ -27,8 +28,8 @@ export default function MultiStepForm(): JSX.Element {
       </CardHeader>
       <CardContent>
         <StepOne />
-
         <StepTwo />
+        <StepThree />
       </CardContent>
       <CardFooter className="flex-col gap-2">
         {/* <Button type="submit" className="w-full">
