@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { JSX } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import NextPrev from "./NextPrev";
 import StepOne from "./StepOne";
 
 export default function MultiStepForm(): JSX.Element {
@@ -59,6 +60,7 @@ export default function MultiStepForm(): JSX.Element {
               dateOfBirth="dateOfBirth"
               profilePic="profilePic"
             />
+            <NextPrev />
             <Button type="submit">Submit</Button>
           </form>
         </Form>

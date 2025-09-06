@@ -20,7 +20,6 @@ import { CalendarIcon } from "lucide-react";
 import { JSX } from "react";
 import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
 import { Input } from "../ui/input";
-import NextPrev from "./NextPrev";
 
 export default function StepOne<T extends FieldValues>({
   form,
@@ -160,7 +159,6 @@ export default function StepOne<T extends FieldValues>({
         />
         {/* Picture end  */}
       </div>
-      <NextPrev />
     </>
   );
 }
