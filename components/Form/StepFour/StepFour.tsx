@@ -21,7 +21,7 @@ import {
 import { stepFourSchema } from "@/schemas/stepFour";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { JSX, useEffect } from "react";
+import { JSX, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
@@ -37,16 +37,27 @@ const relations = [
   "Grandfather",
   "Grandmother",
 ];
-
+const is21Plus = (date: Date) => {
+  const today = new Date();
+  const eighteen = new Date(
+    today.getFullYear() - 21,
+    today.getMonth(),
+    today.getDate()
+  );
+  return date <= eighteen;
+};
 export default function StepFour({
   setData,
   setStep,
   data,
+  dob,
 }: {
   setData: React.Dispatch<React.SetStateAction<Data>>;
   setStep: React.Dispatch<React.SetStateAction<number>>;
   data: z.infer<typeof stepFourSchema>;
+  dob: Date;
 }): JSX.Element {
+  const [showParentInfo, setShowParentInfo] = useState<boolean>(false);
   const form = useForm<z.infer<typeof stepFourSchema>>({
     resolver: zodResolver(stepFourSchema),
     defaultValues: {
@@ -57,7 +68,9 @@ export default function StepFour({
     },
   });
 
-  const { setValue } = form;
+  const { setValue, formState } = form;
+  const { errors } = formState;
+
   useEffect(() => {
     if (data) {
       setValue("contactName", data.contactName);
@@ -67,6 +80,11 @@ export default function StepFour({
       setValue("relationship", data.relationship);
     }
   }, []);
+
+  useEffect(() => {
+    const adult = is21Plus(dob);
+    setShowParentInfo(adult);
+  }, [dob]);
 
   function onSubmit(values: z.infer<typeof stepFourSchema>) {
     setData((prev) => ({
@@ -154,36 +172,38 @@ export default function StepFour({
             />
             {/* Phone end  */}
             {/* Guardian Contact info start  */}
-            <div className="space-y-5">
-              <FormField
-                control={form.control}
-                name="guardianName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Guardian Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Name" {...field} />
-                    </FormControl>
+            {!showParentInfo && (
+              <div className="space-y-5">
+                <FormField
+                  control={form.control}
+                  name="guardianName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Guardian Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Name" {...field} />
+                      </FormControl>
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="guardianPhone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Guardian Phone</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Phone" {...field} />
-                    </FormControl>
-                    <FormDescription>e.g. +1-123-456-7890</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="guardianPhone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Guardian Phone</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Phone" {...field} />
+                      </FormControl>
+                      <FormDescription>e.g. +1-123-456-7890</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
 
             {/* Guardian Contact info end  */}
           </div>

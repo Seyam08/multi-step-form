@@ -37,9 +37,6 @@ export default function MultiStepForm(): JSX.Element {
   });
   const [step, setStep] = useState<number>(1);
 
-  console.log(data);
-  console.log(step);
-
   const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setStep((prev) => (prev > 1 && prev <= 5 ? --prev : prev));
@@ -71,12 +68,18 @@ export default function MultiStepForm(): JSX.Element {
           <StepTwo data={data.stepTwo} setData={setData} setStep={setStep} />
         ) : step === 3 ? (
           <StepThree
+            department={data.stepTwo.department}
             data={data.stepThree}
             setData={setData}
             setStep={setStep}
           />
         ) : step === 4 ? (
-          <StepFour data={data.stepFour} setData={setData} setStep={setStep} />
+          <StepFour
+            dob={data.stepOne.dateOfBirth}
+            data={data.stepFour}
+            setData={setData}
+            setStep={setStep}
+          />
         ) : step === 5 ? (
           <StepFive data={data} setData={setData} setStep={setStep} />
         ) : (

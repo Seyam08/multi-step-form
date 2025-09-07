@@ -281,7 +281,7 @@ export default function StepTwo({
                       <PopoverContent className="w-[200px] p-0">
                         <Command>
                           <CommandInput
-                            placeholder="Search framework..."
+                            placeholder="Search manager..."
                             className="h-9"
                           />
                           <CommandList>

@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { skillsByDepartment } from "@/mock-data/skills";
 import { stepThreeSchema } from "@/schemas/stepThree";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
@@ -27,15 +28,22 @@ export type TimeRange = {
   start: string;
   end: string;
 };
+type Department = keyof typeof skillsByDepartment;
+
+const getSkillsByDepartment = (department: Department): string[] => {
+  return skillsByDepartment[department] ?? [];
+};
 
 export default function StepThree({
   setData,
   setStep,
   data,
+  department,
 }: {
   setData: React.Dispatch<React.SetStateAction<Data>>;
   setStep: React.Dispatch<React.SetStateAction<number>>;
   data: z.infer<typeof stepThreeSchema>;
+  department: string;
 }): JSX.Element {
   const [timeRange, setTimeRange] = useState<TimeRange>({ start: "", end: "" });
   const [remoteApprove, setRemoteApprove] = useState<boolean>(false);
@@ -91,17 +99,12 @@ export default function StepThree({
     e.preventDefault();
     setStep((prev) => (prev > 1 && prev <= 5 ? --prev : prev));
   };
-  const items = [
-    "JavaScript",
-    "TypeScript",
-    "React",
-    "Node.js",
-    "GraphQL",
-    "Docker",
-    "CI/CD",
-    "Microservices",
-    "Unit Testing",
-  ];
+
+  const skillSet = getSkillsByDepartment(
+    (department in skillsByDepartment
+      ? department
+      : "Engineering") as Department
+  );
 
   return (
     <>
@@ -123,7 +126,7 @@ export default function StepThree({
                       Choose your primary skills ( at least 3 )
                     </FormDescription>
                   </div>
-                  {items.map((item, i) => (
+                  {skillSet.map((item, i) => (
                     <FormField
                       key={i}
                       control={form.control}

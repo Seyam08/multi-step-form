@@ -24,7 +24,7 @@ export default function TimeRange({
 
   const handleStartChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    console.log(value);
+
     setStartTime(value);
 
     if (value >= endTime) {

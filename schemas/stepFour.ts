@@ -14,16 +14,13 @@ export const stepFourSchema = z.object({
     .string({ error: "Please provide a contact number!" })
     .trim()
     .regex(/^\+\d{1,3}-\d{3}-\d{3}-\d{4}$/, "Format: +1-123-456-7890"),
-  guardianName: z
+  guardianName: z.string().optional(),
+  guardianPhone: z
     .string()
     .trim()
-    .min(1, "Guardian name is required")
+    .optional()
     .refine(
-      (v) => v.split(/\s+/).filter(Boolean).length >= 2,
-      "Please enter at least two words"
+      (v) => !v || /^\+\d{1,3}-\d{3}-\d{3}-\d{4}$/.test(v),
+      "Format: +1-123-456-7890"
     ),
-  guardianPhone: z
-    .string({ error: "Please provide a contact number!" })
-    .trim()
-    .regex(/^\+\d{1,3}-\d{3}-\d{3}-\d{4}$/, "Format: +1-123-456-7890"),
 });

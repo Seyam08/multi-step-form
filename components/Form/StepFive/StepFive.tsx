@@ -29,7 +29,6 @@ export default function StepFive({
 }): JSX.Element {
   const form = useForm<z.infer<typeof stepFiveSchema>>({
     resolver: zodResolver(stepFiveSchema),
-    defaultValues: {},
   });
 
   function onSubmit(values: z.infer<typeof stepFiveSchema>) {
@@ -140,13 +139,17 @@ export default function StepFive({
                 <p>
                   <strong>Phone:</strong> {stepFour.phone}
                 </p>
-                <Separator />
-                <p>
-                  <strong>Guardian Name:</strong> {stepFour.guardianName}
-                </p>
-                <p>
-                  <strong>Guardian Phone:</strong> {stepFour.guardianPhone}
-                </p>
+                {stepFour.guardianName && stepFour.guardianPhone ? (
+                  <>
+                    <Separator />
+                    <p>
+                      <strong>Guardian Name:</strong> {stepFour.guardianName}
+                    </p>
+                    <p>
+                      <strong>Guardian Phone:</strong> {stepFour.guardianPhone}
+                    </p>
+                  </>
+                ) : null}
               </CardContent>
             </Card>
           </div>
