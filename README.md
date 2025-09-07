@@ -4,12 +4,19 @@ A modern, responsive multi-step form built with Next.js 15, TypeScript, Tailwind
 
 ## 🚀 Getting Started
 
+### Live preview
+
+https://se-yam.netlify.app/
+
 ### Installation
 
 1. Clone the repository:
 
 ```bash
 git clone https://github.com/Seyam08/multi-step-form.git
+```
+
+```bash
 cd multi-step-form
 ```
 
@@ -30,7 +37,7 @@ yarn dev
 
 ```
 
-### Building for Production
+4. Building for Production
 
 ```bash
 npm run build
@@ -38,7 +45,7 @@ npm run build
 yarn build
 ```
 
-### Starting Production Server
+5. Starting Production Server
 
 ```bash
 npm start
@@ -46,7 +53,7 @@ npm start
 yarn start
 ```
 
-### Linting
+6. Linting
 
 ```bash
 npm run lint
