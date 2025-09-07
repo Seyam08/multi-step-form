@@ -1,4 +1,5 @@
 "use client";
+
 import { Data } from "@/components/Form/MultiStepForm";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,6 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { JSX } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
 export default function StepFive({
@@ -29,9 +31,11 @@ export default function StepFive({
   const form = useForm<z.infer<typeof stepFiveSchema>>({
     resolver: zodResolver(stepFiveSchema),
   });
-
-  function onSubmit() {
+  function onSubmit(_values: z.infer<typeof stepFiveSchema>) {
     setStep(5);
+    toast("Your form has been submitted", {
+      description: "If you reload then information will be cleared!",
+    });
   }
   const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

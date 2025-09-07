@@ -28,13 +28,14 @@ export type Data = {
   stepThree: z.infer<typeof stepThreeSchema>;
   stepFour: z.infer<typeof stepFourSchema>;
 };
+export const initialData: Data = {
+  stepOne: {} as z.infer<typeof stepOneSchema>,
+  stepTwo: {} as z.infer<typeof stepTwoSchema>,
+  stepThree: {} as z.infer<typeof stepThreeSchema>,
+  stepFour: {} as z.infer<typeof stepFourSchema>,
+};
 export default function MultiStepForm(): JSX.Element {
-  const [data, setData] = useState<Data>({
-    stepOne: {} as z.infer<typeof stepOneSchema>,
-    stepTwo: {} as z.infer<typeof stepTwoSchema>,
-    stepThree: {} as z.infer<typeof stepThreeSchema>,
-    stepFour: {} as z.infer<typeof stepFourSchema>,
-  });
+  const [data, setData] = useState<Data>(initialData);
   const [step, setStep] = useState<number>(1);
 
   const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {

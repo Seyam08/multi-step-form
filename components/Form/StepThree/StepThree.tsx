@@ -235,7 +235,7 @@ export default function StepThree({
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                       <div className="space-y-0.5">
-                        <FormLabel>Manager`&apos;`s Approval</FormLabel>
+                        <FormLabel>Manager&apos;s Approval</FormLabel>
                       </div>
                       <FormControl>
                         <Switch
