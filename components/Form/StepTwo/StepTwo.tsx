@@ -1,7 +1,7 @@
 "use client";
+import { Data } from "@/components/Form/MultiStepForm";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-
 import {
   Command,
   CommandEmpty,
@@ -47,13 +47,21 @@ import {
   ChevronRightIcon,
   ChevronsUpDown,
 } from "lucide-react";
-import { JSX } from "react";
+import { JSX, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
 const departmentList = Object.keys(skillsByDepartment);
 
-export default function StepTwo(): JSX.Element {
+export default function StepTwo({
+  setData,
+  setStep,
+  data,
+}: {
+  setData: React.Dispatch<React.SetStateAction<Data>>;
+  setStep: React.Dispatch<React.SetStateAction<number>>;
+  data: z.infer<typeof stepTwoSchema>;
+}): JSX.Element {
   const form = useForm<z.infer<typeof stepTwoSchema>>({
     resolver: zodResolver(stepTwoSchema),
     defaultValues: {
@@ -62,10 +70,32 @@ export default function StepTwo(): JSX.Element {
       salaryExpt: 0,
     },
   });
+  const { setValue } = form;
+  useEffect(() => {
+    if (data) {
+      setValue("department", data.department);
+      setValue("jobType", data.jobType);
+      setValue("manager", data.manager);
+      setValue("position", data.position);
+      setValue("salaryExpt", data.salaryExpt);
+      setValue("startDate", data.startDate);
+    }
+  }, []);
 
   function onSubmit(values: z.infer<typeof stepTwoSchema>) {
-    console.log(values);
+    setData((prev) => ({
+      ...prev,
+      stepTwo: {
+        ...prev.stepTwo,
+        ...values,
+      },
+    }));
+    setStep(3);
   }
+  const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setStep((prev) => (prev > 1 && prev <= 5 ? --prev : prev));
+  };
   const selectedDept = form.watch("department");
 
   const managersList = mockManagers
@@ -360,7 +390,12 @@ export default function StepTwo(): JSX.Element {
           </div>
           {/* next and prev button  start*/}
           <div className="flex justify-between my-5">
-            <Button variant="outline" size="sm" className="uppercase">
+            <Button
+              variant="outline"
+              size="sm"
+              className="uppercase"
+              onClick={handlePrev}
+            >
               <ChevronLeftIcon /> prev
             </Button>
             <Button

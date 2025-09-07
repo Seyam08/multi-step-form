@@ -1,4 +1,6 @@
 "use client";
+import { Data } from "@/components/Form/MultiStepForm";
+import TimeRange from "@/components/TimeRange/TimeRange";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -10,31 +12,37 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { stepThreeSchema } from "@/schemas/stepThree";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { JSX, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
-import TimeRange from "@/components/TimeRange/TimeRange";
-import { Input } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
-import { stepThreeSchema } from "@/schemas/stepThree";
-
 export type TimeRange = {
   start: string;
   end: string;
 };
 
-export default function StepThree(): JSX.Element {
+export default function StepThree({
+  setData,
+  setStep,
+  data,
+}: {
+  setData: React.Dispatch<React.SetStateAction<Data>>;
+  setStep: React.Dispatch<React.SetStateAction<number>>;
+  data: z.infer<typeof stepThreeSchema>;
+}): JSX.Element {
   const [timeRange, setTimeRange] = useState<TimeRange>({ start: "", end: "" });
   const [remoteApprove, setRemoteApprove] = useState<boolean>(false);
   const form = useForm<z.infer<typeof stepThreeSchema>>({
     resolver: zodResolver(stepThreeSchema),
     defaultValues: {
-      skills: ["React", "GraphQL"],
+      skills: [],
       remotePrefer: 50,
       managerApprove: false,
     },
@@ -42,6 +50,17 @@ export default function StepThree(): JSX.Element {
   const { setValue } = form;
   const selectedSkills = form.watch("skills");
   const rmPrefer = form.watch("remotePrefer");
+
+  useEffect(() => {
+    if (data) {
+      setValue("experience", data.experience);
+      setValue("managerApprove", data.managerApprove);
+      setValue("notes", data.notes);
+      setValue("preferWorkTime", data.preferWorkTime);
+      setValue("remotePrefer", data.remotePrefer);
+      // setValue("skills", data.skills);
+    }
+  }, []);
 
   useEffect(() => {
     setValue("preferWorkTime", {
@@ -53,12 +72,25 @@ export default function StepThree(): JSX.Element {
   useEffect(() => {
     if (rmPrefer < 50) {
       setRemoteApprove(true);
+    } else {
+      setRemoteApprove(false);
     }
   }, [rmPrefer]);
 
   function onSubmit(values: z.infer<typeof stepThreeSchema>) {
-    console.log(values);
+    setData((prev) => ({
+      ...prev,
+      stepThree: {
+        ...prev.stepThree,
+        ...values,
+      },
+    }));
+    setStep(4);
   }
+  const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setStep((prev) => (prev > 1 && prev <= 5 ? --prev : prev));
+  };
   const items = [
     "JavaScript",
     "TypeScript",
@@ -132,7 +164,7 @@ export default function StepThree(): JSX.Element {
             {/* Primary Skills end  */}
             {/* Experience for Each Skill start */}
             <div className="space-y-3">
-              {selectedSkills.map((item, i) => {
+              {selectedSkills?.map((item, i) => {
                 return (
                   <FormField
                     key={i}
@@ -240,7 +272,12 @@ export default function StepThree(): JSX.Element {
 
           {/* next and prev button  start*/}
           <div className="flex justify-between my-5">
-            <Button variant="outline" size="sm" className="uppercase">
+            <Button
+              variant="outline"
+              size="sm"
+              className="uppercase"
+              onClick={handlePrev}
+            >
               <ChevronLeftIcon /> prev
             </Button>
             <Button

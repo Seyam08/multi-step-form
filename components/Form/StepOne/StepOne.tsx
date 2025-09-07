@@ -1,4 +1,5 @@
 "use client";
+import { Data } from "@/components/Form/MultiStepForm";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -21,11 +22,19 @@ import { stepOneSchema } from "@/schemas/stepOne";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { JSX } from "react";
+import { JSX, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
-export default function StepOne(): JSX.Element {
+export default function StepOne({
+  setData,
+  setStep,
+  data,
+}: {
+  setData: React.Dispatch<React.SetStateAction<Data>>;
+  setStep: React.Dispatch<React.SetStateAction<number>>;
+  data: z.infer<typeof stepOneSchema>;
+}): JSX.Element {
   const form = useForm<z.infer<typeof stepOneSchema>>({
     resolver: zodResolver(stepOneSchema),
     defaultValues: {
@@ -35,10 +44,30 @@ export default function StepOne(): JSX.Element {
       dateOfBirth: new Date(),
     },
   });
+  const { setValue } = form;
+  useEffect(() => {
+    if (data) {
+      setValue("fullName", data.fullName);
+      setValue("email", data.email);
+      setValue("dateOfBirth", data.dateOfBirth);
+      setValue("phone", data.phone);
+    }
+  }, []);
 
   function onSubmit(values: z.infer<typeof stepOneSchema>) {
-    console.log(values);
+    setData((prev) => ({
+      ...prev,
+      stepOne: {
+        ...prev.stepOne,
+        ...values,
+      },
+    }));
+    setStep(2);
   }
+  const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setStep((prev) => (prev > 1 && prev <= 5 ? --prev : prev));
+  };
   return (
     <>
       <Form {...form}>
@@ -169,7 +198,12 @@ export default function StepOne(): JSX.Element {
           </div>
           {/* next and prev button  start*/}
           <div className="flex justify-between my-5">
-            <Button variant="outline" size="sm" className="uppercase">
+            <Button
+              variant="outline"
+              size="sm"
+              className="uppercase"
+              onClick={handlePrev}
+            >
               <ChevronLeftIcon /> prev
             </Button>
             <Button

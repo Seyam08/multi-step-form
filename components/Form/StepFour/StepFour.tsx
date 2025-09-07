@@ -1,4 +1,5 @@
 "use client";
+import { Data } from "@/components/Form/MultiStepForm";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -20,7 +21,7 @@ import {
 import { stepFourSchema } from "@/schemas/stepFour";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { JSX } from "react";
+import { JSX, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
@@ -37,15 +38,50 @@ const relations = [
   "Grandmother",
 ];
 
-export default function StepFour(): JSX.Element {
+export default function StepFour({
+  setData,
+  setStep,
+  data,
+}: {
+  setData: React.Dispatch<React.SetStateAction<Data>>;
+  setStep: React.Dispatch<React.SetStateAction<number>>;
+  data: z.infer<typeof stepFourSchema>;
+}): JSX.Element {
   const form = useForm<z.infer<typeof stepFourSchema>>({
     resolver: zodResolver(stepFourSchema),
-    defaultValues: { contactName: "", phone: "" },
+    defaultValues: {
+      contactName: "",
+      phone: "",
+      guardianName: "",
+      guardianPhone: "",
+    },
   });
 
+  const { setValue } = form;
+  useEffect(() => {
+    if (data) {
+      setValue("contactName", data.contactName);
+      setValue("guardianName", data.guardianName);
+      setValue("guardianPhone", data.guardianPhone);
+      setValue("phone", data.phone);
+      setValue("relationship", data.relationship);
+    }
+  }, []);
+
   function onSubmit(values: z.infer<typeof stepFourSchema>) {
-    console.log(values);
+    setData((prev) => ({
+      ...prev,
+      stepFour: {
+        ...prev.stepFour,
+        ...values,
+      },
+    }));
+    setStep(5);
   }
+  const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setStep((prev) => (prev > 1 && prev <= 5 ? --prev : prev));
+  };
 
   return (
     <>
@@ -154,7 +190,12 @@ export default function StepFour(): JSX.Element {
 
           {/* next and prev button  start*/}
           <div className="flex justify-between my-5">
-            <Button variant="outline" size="sm" className="uppercase">
+            <Button
+              variant="outline"
+              size="sm"
+              className="uppercase"
+              onClick={handlePrev}
+            >
               <ChevronLeftIcon /> prev
             </Button>
             <Button
