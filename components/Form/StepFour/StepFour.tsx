@@ -68,8 +68,7 @@ export default function StepFour({
     },
   });
 
-  const { setValue, formState } = form;
-  const { errors } = formState;
+  const { setValue } = form;
 
   useEffect(() => {
     if (data) {
@@ -79,7 +78,7 @@ export default function StepFour({
       setValue("phone", data.phone);
       setValue("relationship", data.relationship);
     }
-  }, []);
+  }, [data, setValue]);
 
   useEffect(() => {
     const adult = is21Plus(dob);

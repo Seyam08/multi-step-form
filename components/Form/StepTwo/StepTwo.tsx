@@ -80,7 +80,7 @@ export default function StepTwo({
       setValue("salaryExpt", data.salaryExpt);
       setValue("startDate", data.startDate);
     }
-  }, []);
+  }, [data, setValue]);
 
   function onSubmit(values: z.infer<typeof stepTwoSchema>) {
     setData((prev) => ({

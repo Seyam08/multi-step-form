@@ -20,7 +20,7 @@ export default function TimeRange({
         end: endTime,
       });
     }
-  }, [startTime, endTime]);
+  }, [startTime, endTime, error, setTimeRange]);
 
   const handleStartChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

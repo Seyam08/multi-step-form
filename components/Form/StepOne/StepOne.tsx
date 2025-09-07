@@ -52,7 +52,7 @@ export default function StepOne({
       setValue("dateOfBirth", data.dateOfBirth);
       setValue("phone", data.phone);
     }
-  }, []);
+  }, [data, setValue]);
 
   function onSubmit(values: z.infer<typeof stepOneSchema>) {
     setData((prev) => ({
@@ -175,7 +175,7 @@ export default function StepOne({
               control={form.control}
               name="profilePic"
               render={({ field }) => {
-                const { onChange, ...restField } = field;
+                const { onChange } = field;
                 return (
                   <FormItem>
                     <FormLabel>Profile picture</FormLabel>

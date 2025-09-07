@@ -19,7 +19,6 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 
 export default function StepFive({
-  setData,
   setStep,
   data,
 }: {
@@ -31,7 +30,7 @@ export default function StepFive({
     resolver: zodResolver(stepFiveSchema),
   });
 
-  function onSubmit(values: z.infer<typeof stepFiveSchema>) {
+  function onSubmit() {
     setStep(5);
   }
   const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
