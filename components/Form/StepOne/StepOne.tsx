@@ -78,8 +78,7 @@ export default function StepOne({
     }));
     form.setValue("profilePic", undefined);
   };
-  const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handlePrev = () => {
     setStep((prev) => (prev > 1 && prev <= 5 ? --prev : prev));
   };
   return (

@@ -58,6 +58,8 @@ export default function MultiStepForm(): JSX.Element {
           <CardTitle>Fourth step - Emergency Contact</CardTitle>
         ) : step === 4 ? (
           <CardTitle>Last step - Review & Submit</CardTitle>
+        ) : step === 5 ? (
+          <CardTitle>Thank you for submitting the form.</CardTitle>
         ) : (
           <CardTitle>There is something wrong!!!</CardTitle>
         )}

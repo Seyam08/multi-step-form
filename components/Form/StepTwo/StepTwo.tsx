@@ -33,6 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import { mockManagers } from "@/mock-data/mockManagers";
@@ -47,7 +48,7 @@ import {
   ChevronRightIcon,
   ChevronsUpDown,
 } from "lucide-react";
-import { JSX, useEffect } from "react";
+import { JSX, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
@@ -65,22 +66,34 @@ export default function StepTwo({
   const form = useForm<z.infer<typeof stepTwoSchema>>({
     resolver: zodResolver(stepTwoSchema),
     defaultValues: {
-      position: "",
-      startDate: new Date(),
-      salaryExpt: 0,
+      department: data?.department || undefined,
+      position: data?.position || "",
+      startDate: data?.startDate || undefined,
+      salaryExpt: data?.salaryExpt || 0,
+      jobType: data?.jobType || undefined,
+      manager: data?.manager || "",
     },
   });
-  const { setValue } = form;
+
+  // creating managers list array form mock manager
+  const selectedDept = form.watch("department");
+  const selectedMng = form.watch("manager");
+
+  // generating managersList
+  const managersList = useMemo(() => {
+    return mockManagers
+      .filter((manager) => manager.department === selectedDept)
+      .map((item) => item.name);
+  }, [selectedDept]);
+
+  // checking if managersList (that is created based on departmentList) has the selected manager,
+  // otherwise set the value of manager to empty
   useEffect(() => {
-    if (data) {
-      setValue("department", data.department);
-      setValue("jobType", data.jobType);
-      setValue("manager", data.manager);
-      setValue("position", data.position);
-      setValue("salaryExpt", data.salaryExpt);
-      setValue("startDate", data.startDate);
+    if (!managersList.includes(selectedMng)) {
+      form.setValue("manager", "");
     }
-  }, [data, setValue]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [managersList, selectedMng]);
 
   function onSubmit(values: z.infer<typeof stepTwoSchema>) {
     setData((prev) => ({
@@ -90,17 +103,11 @@ export default function StepTwo({
         ...values,
       },
     }));
-    setStep(3);
+    setStep(2);
   }
-  const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setStep((prev) => (prev > 1 && prev <= 5 ? --prev : prev));
+  const handlePrev = () => {
+    setStep((prev) => (prev > 0 && prev <= 5 ? --prev : prev));
   };
-  const selectedDept = form.watch("department");
-
-  const managersList = mockManagers
-    .filter((managerName) => managerName.department === selectedDept)
-    .map((item) => item.name);
 
   return (
     <>
@@ -123,7 +130,7 @@ export default function StepTwo({
                   >
                     <FormControl className="w-full">
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a Department" />
+                        <SelectValue placeholder="Select a department" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -134,7 +141,6 @@ export default function StepTwo({
                       ))}
                     </SelectContent>
                   </Select>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -181,7 +187,11 @@ export default function StepTwo({
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
+                    <PopoverContent
+                      className="w-full p-0"
+                      align="start"
+                      side="bottom"
+                    >
                       <Calendar
                         mode="single"
                         selected={field.value}
@@ -278,16 +288,20 @@ export default function StepTwo({
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
-                      <PopoverContent className="w-[200px] p-0">
+                      <PopoverContent className="min-w-full p-0">
                         <Command>
                           <CommandInput
                             placeholder="Search manager..."
                             className="h-9"
                           />
                           <CommandList>
-                            <CommandEmpty>No Manager found.</CommandEmpty>
+                            <CommandEmpty>
+                              {selectedDept
+                                ? "No Manager found."
+                                : "Please select your department first"}
+                            </CommandEmpty>
                             <CommandGroup>
-                              {managersList.map((managerName, i) => (
+                              {managersList?.map((managerName, i) => (
                                 <CommandItem
                                   value={managerName}
                                   key={i}
@@ -343,7 +357,12 @@ export default function StepTwo({
                       <FormDescription>
                         Contract: hourly rate ${expected}
                       </FormDescription>
-                    ) : null}
+                    ) : (
+                      <FormDescription>
+                        Choose a job type before entering your salary
+                        expectation.
+                      </FormDescription>
+                    )}
 
                     <FormControl>
                       {type == "full-time" ? (
@@ -379,7 +398,9 @@ export default function StepTwo({
                           step={10}
                           className="cursor-pointer"
                         />
-                      ) : null}
+                      ) : (
+                        <Skeleton className="h-5 w-full bg-zinc-300 dark:bg-zinc-800" />
+                      )}
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -408,6 +429,13 @@ export default function StepTwo({
             </Button>
           </div>
           {/* next and prev button  end*/}
+          <div>
+            {Object.entries(form.formState.errors).map(([field, error]) => (
+              <div key={field} style={{ color: "red", marginBottom: "4px" }}>
+                <strong>{field}:</strong> {error.message}
+              </div>
+            ))}
+          </div>
         </form>
       </Form>
     </>

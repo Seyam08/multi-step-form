@@ -93,7 +93,7 @@ export default function StepThree({
         ...values,
       },
     }));
-    setStep(4);
+    setStep(3);
   }
   const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
