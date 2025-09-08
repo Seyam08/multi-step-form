@@ -38,8 +38,7 @@ export default function MultiStepForm(): JSX.Element {
   const [data, setData] = useState<Data>(initialData);
   const [step, setStep] = useState<number>(0);
 
-  const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handlePrev = () => {
     setStep((prev) => (prev > 1 && prev <= 5 ? --prev : prev));
   };
   return (
