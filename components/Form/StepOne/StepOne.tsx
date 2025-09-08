@@ -1,5 +1,6 @@
 "use client";
 import { Data } from "@/components/Form/MultiStepForm";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -17,12 +18,22 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { stepOneSchema } from "@/schemas/stepOne";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { JSX, useEffect } from "react";
+import {
+  CalendarIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  CircleMinus,
+} from "lucide-react";
+import { JSX } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
@@ -38,21 +49,13 @@ export default function StepOne({
   const form = useForm<z.infer<typeof stepOneSchema>>({
     resolver: zodResolver(stepOneSchema),
     defaultValues: {
-      fullName: "",
-      email: "",
-      phone: "",
-      dateOfBirth: new Date(),
+      fullName: data.fullName || "",
+      email: data.email || "",
+      phone: data.phone || "",
+      dateOfBirth: data.dateOfBirth || new Date(),
+      profilePic: data.profilePic || undefined,
     },
   });
-  const { setValue } = form;
-  useEffect(() => {
-    if (data) {
-      setValue("fullName", data.fullName);
-      setValue("email", data.email);
-      setValue("dateOfBirth", data.dateOfBirth);
-      setValue("phone", data.phone);
-    }
-  }, [data, setValue]);
 
   function onSubmit(values: z.infer<typeof stepOneSchema>) {
     setData((prev) => ({
@@ -62,8 +65,19 @@ export default function StepOne({
         ...values,
       },
     }));
-    setStep(2);
+    setStep(1);
   }
+
+  const handleImageBtn = () => {
+    setData((prev) => ({
+      ...prev,
+      stepOne: {
+        ...prev.stepOne,
+        profilePic: undefined,
+      },
+    }));
+    form.setValue("profilePic", undefined);
+  };
   const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setStep((prev) => (prev > 1 && prev <= 5 ? --prev : prev));
@@ -170,24 +184,54 @@ export default function StepOne({
               )}
             />
             {/* DOB end  */}
+
             {/* Picture start  */}
             <FormField
               control={form.control}
               name="profilePic"
               render={({ field }) => {
                 const { onChange } = field;
+                const selectedFile = form.watch("profilePic");
+                const fileUrl = selectedFile
+                  ? URL.createObjectURL(selectedFile)
+                  : null;
                 return (
                   <FormItem>
                     <FormLabel>Profile picture</FormLabel>
                     <FormControl>
-                      <Input
-                        id="profilePic"
-                        type="file"
-                        onChange={(e) => onChange(e.target.files?.[0])}
-                      />
+                      {fileUrl ? (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Avatar>
+                              <AvatarImage
+                                src={fileUrl}
+                                alt={selectedFile?.name}
+                              />
+                              <AvatarFallback>CN</AvatarFallback>
+                            </Avatar>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <Button
+                              size="sm"
+                              className="bg-red-400 hover:bg-red-500 transition-all cursor-pointer text-white shadow-xs"
+                              onClick={handleImageBtn}
+                            >
+                              <CircleMinus />
+                            </Button>
+                          </TooltipContent>
+                        </Tooltip>
+                      ) : (
+                        <Input
+                          id="profilePic"
+                          type="file"
+                          onChange={(e) => onChange(e.target.files?.[0])}
+                        />
+                      )}
                     </FormControl>
                     <FormDescription>
-                      Please upload a picture of yours.
+                      {selectedFile
+                        ? selectedFile?.name
+                        : "Please upload a picture of yours."}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

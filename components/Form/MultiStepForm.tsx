@@ -36,7 +36,7 @@ export const initialData: Data = {
 };
 export default function MultiStepForm(): JSX.Element {
   const [data, setData] = useState<Data>(initialData);
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(0);
 
   const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -48,40 +48,40 @@ export default function MultiStepForm(): JSX.Element {
         <Progress value={step * 20} />
       </CardContent>
       <CardHeader>
-        {step === 1 ? (
+        {step === 0 ? (
           <CardTitle>First step - Personal Info</CardTitle>
-        ) : step === 2 ? (
+        ) : step === 1 ? (
           <CardTitle>Second step - Job Details</CardTitle>
-        ) : step === 3 ? (
+        ) : step === 2 ? (
           <CardTitle>Third step - Skills & Preferences</CardTitle>
-        ) : step === 4 ? (
+        ) : step === 3 ? (
           <CardTitle>Fourth step - Emergency Contact</CardTitle>
-        ) : step === 5 ? (
+        ) : step === 4 ? (
           <CardTitle>Last step - Review & Submit</CardTitle>
         ) : (
           <CardTitle>There is something wrong!!!</CardTitle>
         )}
       </CardHeader>
       <CardContent>
-        {step === 1 ? (
+        {step === 0 ? (
           <StepOne data={data.stepOne} setData={setData} setStep={setStep} />
-        ) : step === 2 ? (
+        ) : step === 1 ? (
           <StepTwo data={data.stepTwo} setData={setData} setStep={setStep} />
-        ) : step === 3 ? (
+        ) : step === 2 ? (
           <StepThree
             department={data.stepTwo.department}
             data={data.stepThree}
             setData={setData}
             setStep={setStep}
           />
-        ) : step === 4 ? (
+        ) : step === 3 ? (
           <StepFour
             dob={data.stepOne.dateOfBirth}
             data={data.stepFour}
             setData={setData}
             setStep={setStep}
           />
-        ) : step === 5 ? (
+        ) : step === 4 ? (
           <StepFive data={data} setData={setData} setStep={setStep} />
         ) : (
           <Button
