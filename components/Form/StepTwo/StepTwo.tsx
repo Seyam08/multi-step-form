@@ -429,13 +429,6 @@ export default function StepTwo({
             </Button>
           </div>
           {/* next and prev button  end*/}
-          <div>
-            {Object.entries(form.formState.errors).map(([field, error]) => (
-              <div key={field} style={{ color: "red", marginBottom: "4px" }}>
-                <strong>{field}:</strong> {error.message}
-              </div>
-            ))}
-          </div>
         </form>
       </Form>
     </>
