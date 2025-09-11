@@ -35,9 +35,9 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Slider } from "@/components/ui/slider";
+import { departmentList } from "@/lib/helper";
 import { cn } from "@/lib/utils";
 import { mockManagers } from "@/mock-data/mockManagers";
-import { skillsByDepartment } from "@/mock-data/skills";
 import { stepTwoSchema } from "@/schemas/stepTwo";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -51,8 +51,6 @@ import {
 import { JSX, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
-
-const departmentList = Object.keys(skillsByDepartment);
 
 export default function StepTwo({
   setData,

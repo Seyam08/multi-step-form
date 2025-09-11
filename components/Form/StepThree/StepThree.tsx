@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { skillsByDepartment } from "@/mock-data/skills";
+import { Department, getSkillsByDepartment } from "@/lib/helper";
 import { stepThreeSchema } from "@/schemas/stepThree";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
@@ -27,11 +27,6 @@ import z from "zod";
 export type TimeRange = {
   start: string;
   end: string;
-};
-type Department = keyof typeof skillsByDepartment;
-
-const getSkillsByDepartment = (department: Department): string[] => {
-  return skillsByDepartment[department] ?? [];
 };
 
 export default function StepThree({
@@ -50,25 +45,17 @@ export default function StepThree({
   const form = useForm<z.infer<typeof stepThreeSchema>>({
     resolver: zodResolver(stepThreeSchema),
     defaultValues: {
-      skills: [],
-      remotePrefer: 50,
-      managerApprove: false,
+      skills: data.skills || [],
+      remotePrefer: data.remotePrefer || undefined,
+      managerApprove: data.managerApprove || false,
+      experience: data.experience || undefined,
+      notes: data.notes || undefined,
+      preferWorkTime: data.preferWorkTime || undefined,
     },
   });
   const { setValue } = form;
   const selectedSkills = form.watch("skills");
   const rmPrefer = form.watch("remotePrefer");
-
-  useEffect(() => {
-    if (data) {
-      setValue("experience", data.experience);
-      setValue("managerApprove", data.managerApprove);
-      setValue("notes", data.notes);
-      setValue("preferWorkTime", data.preferWorkTime);
-      setValue("remotePrefer", data.remotePrefer);
-      // setValue("skills", data.skills);
-    }
-  }, [data, setValue]);
 
   useEffect(() => {
     setValue("preferWorkTime", {
@@ -97,14 +84,10 @@ export default function StepThree({
   }
   const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setStep((prev) => (prev > 1 && prev <= 5 ? --prev : prev));
+    setStep((prev) => (prev > 0 && prev <= 5 ? --prev : prev));
   };
 
-  const skillSet = getSkillsByDepartment(
-    (department in skillsByDepartment
-      ? department
-      : "Engineering") as Department
-  );
+  const skillSet = getSkillsByDepartment(department as Department);
 
   return (
     <>
@@ -168,6 +151,7 @@ export default function StepThree({
             {/* Experience for Each Skill start */}
             <div className="space-y-3">
               {selectedSkills?.map((item, i) => {
+                console.log(selectedSkills);
                 return (
                   <FormField
                     key={i}
