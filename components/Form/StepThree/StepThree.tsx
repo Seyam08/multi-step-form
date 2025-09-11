@@ -139,7 +139,7 @@ export default function StepThree({
                           >
                             <FormControl>
                               <Checkbox
-                                className="cursor-pointer"
+                                className="cursor-pointer bg-primary/20"
                                 checked={field.value?.includes(item)}
                                 onCheckedChange={(checked) => {
                                   return checked
