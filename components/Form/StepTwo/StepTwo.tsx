@@ -399,7 +399,7 @@ export default function StepTwo({
                           className="cursor-pointer"
                         />
                       ) : (
-                        <Skeleton className="h-5 w-full bg-zinc-300 dark:bg-zinc-800" />
+                        <Skeleton className="h-5 w-full" />
                       )}
                     </FormControl>
                     <FormMessage />
