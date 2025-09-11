@@ -224,7 +224,7 @@ export default function StepTwo({
                         <FormControl>
                           <RadioGroupItem
                             value="full-time"
-                            className="cursor-pointer"
+                            className="cursor-pointer bg-primary/30"
                           />
                         </FormControl>
                         <FormLabel className="font-normal cursor-pointer">
@@ -235,7 +235,7 @@ export default function StepTwo({
                         <FormControl>
                           <RadioGroupItem
                             value="part-time"
-                            className="cursor-pointer"
+                            className="cursor-pointer bg-primary/30"
                           />
                         </FormControl>
                         <FormLabel className="font-normal cursor-pointer">
@@ -246,7 +246,7 @@ export default function StepTwo({
                         <FormControl>
                           <RadioGroupItem
                             value="contract"
-                            className="cursor-pointer"
+                            className="cursor-pointer bg-primary/30"
                           />
                         </FormControl>
                         <FormLabel className="font-normal cursor-pointer">
