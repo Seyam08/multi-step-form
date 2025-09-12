@@ -10,7 +10,7 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Talent hunt - M360 ICT",
+  title: "Talent hunt",
   description:
     "Find extraordinary talents nationwide with our smart onboarding form.",
 };
