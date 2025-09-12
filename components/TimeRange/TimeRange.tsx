@@ -12,10 +12,10 @@ export default function TimeRange({
   initialValue: { start: string; end: string };
 }): JSX.Element {
   const [startTime, setStartTime] = useState<string>(
-    initialValue.start || "10:30:00"
+    initialValue?.start || "10:30:00"
   );
   const [endTime, setEndTime] = useState<string>(
-    initialValue.end || "18:30:00"
+    initialValue?.end || "18:30:00"
   );
   const [error, setError] = useState<string>("");
 
