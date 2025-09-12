@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { handleNext, handlePrev } from "@/lib/helper";
 import { stepFourSchema } from "@/schemas/stepFour";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
@@ -93,12 +94,8 @@ export default function StepFour({
         ...values,
       },
     }));
-    setStep(4);
+    handleNext(setStep);
   }
-  const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setStep((prev) => (prev > 1 && prev <= 5 ? --prev : prev));
-  };
 
   return (
     <>
@@ -212,8 +209,8 @@ export default function StepFour({
             <Button
               variant="outline"
               size="sm"
-              className="uppercase"
-              onClick={handlePrev}
+              className="uppercase cursor-pointer"
+              onClick={(e) => handlePrev(setStep, e)}
             >
               <ChevronLeftIcon /> prev
             </Button>
@@ -221,7 +218,7 @@ export default function StepFour({
               type="submit"
               variant="outline"
               size="sm"
-              className="uppercase"
+              className="uppercase cursor-pointer"
             >
               <ChevronRightIcon /> next
             </Button>

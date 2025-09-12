@@ -23,6 +23,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { handleNext, handlePrev } from "@/lib/helper";
 import { cn } from "@/lib/utils";
 import { stepOneSchema } from "@/schemas/stepOne";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -41,10 +42,12 @@ export default function StepOne({
   setData,
   setStep,
   data,
+  step,
 }: {
   setData: React.Dispatch<React.SetStateAction<Data>>;
   setStep: React.Dispatch<React.SetStateAction<number>>;
   data: z.infer<typeof stepOneSchema>;
+  step: number;
 }): JSX.Element {
   const form = useForm<z.infer<typeof stepOneSchema>>({
     resolver: zodResolver(stepOneSchema),
@@ -65,7 +68,7 @@ export default function StepOne({
         ...values,
       },
     }));
-    setStep(1);
+    handleNext(setStep);
   }
 
   const handleImageBtn = () => {
@@ -78,9 +81,7 @@ export default function StepOne({
     }));
     form.setValue("profilePic", undefined);
   };
-  const handlePrev = () => {
-    setStep((prev) => (prev > 1 && prev <= 5 ? --prev : prev));
-  };
+
   return (
     <>
       <Form {...form}>
@@ -243,9 +244,10 @@ export default function StepOne({
           <div className="flex justify-between my-5">
             <Button
               variant="outline"
+              disabled={step === 0}
               size="sm"
-              className="uppercase"
-              onClick={handlePrev}
+              className="uppercase cursor-not-allowed"
+              onClick={(e) => handlePrev(setStep, e)}
             >
               <ChevronLeftIcon /> prev
             </Button>
@@ -253,7 +255,7 @@ export default function StepOne({
               type="submit"
               variant="outline"
               size="sm"
-              className="uppercase"
+              className="uppercase cursor-pointer"
             >
               <ChevronRightIcon /> next
             </Button>
