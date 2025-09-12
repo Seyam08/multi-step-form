@@ -20,7 +20,7 @@ import { Department, getSkillsByDepartment } from "@/lib/helper";
 import { stepThreeSchema } from "@/schemas/stepThree";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { JSX, useEffect, useState } from "react";
+import { JSX, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
@@ -48,12 +48,12 @@ export default function StepThree({
       skills: data.skills || [],
       remotePrefer: data.remotePrefer || undefined,
       managerApprove: data.managerApprove || false,
-      experience: data.experience || undefined,
+      experience: data.experience || "",
       notes: data.notes || undefined,
       preferWorkTime: data.preferWorkTime || undefined,
     },
   });
-  const { setValue } = form;
+  const { setValue, getValues } = form;
   const selectedSkills = form.watch("skills");
   const rmPrefer = form.watch("remotePrefer");
 
@@ -71,6 +71,25 @@ export default function StepThree({
       setRemoteApprove(false);
     }
   }, [rmPrefer]);
+
+  // calculation of skills set with experience
+  const updatedExp = useMemo(() => {
+    const oldExp = getValues("experience") || {};
+
+    const filtered = Object.fromEntries(
+      Object.entries(oldExp).filter(([key]) => selectedSkills.includes(key))
+    );
+
+    selectedSkills.forEach((key) => {
+      if (!(key in filtered)) filtered[key] = "";
+    });
+
+    return filtered;
+  }, [getValues, selectedSkills]);
+
+  useEffect(() => {
+    setValue("experience", updatedExp);
+  }, [setValue, updatedExp]);
 
   function onSubmit(values: z.infer<typeof stepThreeSchema>) {
     setData((prev) => ({
@@ -151,25 +170,39 @@ export default function StepThree({
             {/* Experience for Each Skill start */}
             <div className="space-y-3">
               {selectedSkills?.map((item, i) => {
-                console.log(selectedSkills);
                 return (
                   <FormField
                     key={i}
                     control={form.control}
-                    name={`experience.${i}`}
-                    render={({ field }) => {
+                    name="experience"
+                    render={(total) => {
+                      const { field, formState } = total;
+                      const { errors } = formState;
                       return (
                         <FormItem>
                           <FormLabel>{item}</FormLabel>
                           <FormControl>
                             <Input
                               placeholder="Related Experience"
-                              {...field}
-                              value={field.value || ""}
+                              value={field.value?.[item] || ""}
+                              onChange={(e) =>
+                                field.onChange({
+                                  ...field.value,
+                                  [item]: e.target.value,
+                                })
+                              }
                             />
                           </FormControl>
 
                           <FormMessage />
+                          {errors.experience?.[item] ? (
+                            <p
+                              data-slot="form-message"
+                              className="text-destructive text-sm"
+                            >
+                              {errors?.experience[item].message} on {item}
+                            </p>
+                          ) : null}
                         </FormItem>
                       );
                     }}
@@ -179,7 +212,10 @@ export default function StepThree({
             </div>
             {/* Experience for Each Skill end */}
             {/* Preferred Working Hours start  */}
-            <TimeRange setTimeRange={setTimeRange} />
+            <TimeRange
+              setTimeRange={setTimeRange}
+              initialValue={data.preferWorkTime}
+            />
             {/* Preferred Working Hours end  */}
             {/* Remote Work Preference start */}
             <div className="space-y-5">
@@ -217,16 +253,19 @@ export default function StepThree({
                   control={form.control}
                   name="managerApprove"
                   render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                      <div className="space-y-0.5">
-                        <FormLabel>Manager&apos;s Approval</FormLabel>
+                    <FormItem>
+                      <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                        <div className="space-y-0.5">
+                          <FormLabel>Manager&apos;s Approval</FormLabel>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
                       </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />

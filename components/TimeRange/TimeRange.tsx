@@ -6,11 +6,17 @@ import { ChangeEvent, JSX, useEffect, useState } from "react";
 
 export default function TimeRange({
   setTimeRange,
+  initialValue,
 }: {
   setTimeRange: React.Dispatch<React.SetStateAction<TimeRange>>;
+  initialValue: { start: string; end: string };
 }): JSX.Element {
-  const [startTime, setStartTime] = useState<string>("10:30:00");
-  const [endTime, setEndTime] = useState<string>("18:30:00");
+  const [startTime, setStartTime] = useState<string>(
+    initialValue.start || "10:30:00"
+  );
+  const [endTime, setEndTime] = useState<string>(
+    initialValue.end || "18:30:00"
+  );
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
