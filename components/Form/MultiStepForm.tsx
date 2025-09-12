@@ -23,7 +23,7 @@ export type Data = {
   stepThree: z.infer<typeof stepThreeSchema>;
   stepFour: z.infer<typeof stepFourSchema>;
 };
-export const initialData: Data = {
+const initialData: Data = {
   stepOne: {} as z.infer<typeof stepOneSchema>,
   stepTwo: {} as z.infer<typeof stepTwoSchema>,
   stepThree: {} as z.infer<typeof stepThreeSchema>,
@@ -32,7 +32,7 @@ export const initialData: Data = {
 export default function MultiStepForm(): JSX.Element {
   const [data, setData] = useState<Data>(initialData);
   const [step, setStep] = useState<number>(0);
-
+  console.log(JSON.stringify(data));
   return (
     <Card className="w-full md:max-w-3xl 2xl:max-w-5xl">
       <CardContent>

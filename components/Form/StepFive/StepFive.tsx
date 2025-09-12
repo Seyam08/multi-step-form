@@ -1,8 +1,8 @@
 "use client";
 
 import { Data } from "@/components/Form/MultiStepForm";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -10,7 +10,6 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { handleNext, handlePrev } from "@/lib/helper";
 import { stepFiveSchema } from "@/schemas/stepFive";
@@ -40,6 +39,11 @@ export default function StepFive({
   }
 
   const { stepOne, stepTwo, stepThree, stepFour } = data;
+
+  const avatarUrl = stepOne.profilePic
+    ? URL.createObjectURL(stepOne.profilePic)
+    : null;
+
   return (
     <>
       <Form {...form}>
@@ -47,112 +51,159 @@ export default function StepFive({
           onSubmit={form.handleSubmit(onSubmit)}
           className="max-w-full mx-auto"
         >
-          <div className="max-w-3xl mx-auto space-y-6 mb-6">
-            {/* Step One */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Personal Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2 text-sm">
-                <p>
-                  <strong>Full Name:</strong> {stepOne.fullName}
-                </p>
-                <p>
-                  <strong>Email:</strong> {stepOne.email}
-                </p>
-                <p>
-                  <strong>Phone:</strong> {stepOne.phone}
-                </p>
-                <p>
-                  <strong>Date of Birth:</strong>{" "}
-                  {new Date(stepOne.dateOfBirth).toLocaleDateString()}
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Step Two */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Job Details</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2 text-sm">
-                <p>
-                  <strong>Department:</strong> {stepTwo.department}
-                </p>
-                <p>
-                  <strong>Position:</strong> {stepTwo.position}
-                </p>
-                <p>
-                  <strong>Start Date:</strong>{" "}
-                  {new Date(stepTwo.startDate).toLocaleDateString()}
-                </p>
-                <p>
-                  <strong>Job Type:</strong> {stepTwo.jobType}
-                </p>
-                <p>
-                  <strong>Salary Expectation:</strong> ${stepTwo.salaryExpt}
-                </p>
-                <p>
-                  <strong>Manager:</strong> {stepTwo.manager}
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Step Three */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Skills & Preferences</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2 text-sm">
-                <p>
-                  <strong>Skills:</strong> {stepThree.skills.join(", ")}
-                </p>
-                <p>
-                  {/* <strong>Experience:</strong> {stepThree.experience.join(", ")} */}
-                </p>
-                <p>
-                  <strong>Preferred Work Time:</strong>{" "}
-                  {stepThree.preferWorkTime.start} -{" "}
-                  {stepThree.preferWorkTime.end}
-                </p>
-                <p>
-                  <strong>Remote Preference:</strong> {stepThree.remotePrefer}%
-                </p>
-                <p>
-                  <strong>Manager Approval:</strong>{" "}
-                  {stepThree.managerApprove ? "Yes" : "No"}
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Step Four */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Emergency Contact</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2 text-sm">
-                <p>
-                  <strong>Contact Name:</strong> {stepFour.contactName}
-                </p>
-                <p>
-                  <strong>Relationship:</strong> {stepFour.relationship}
-                </p>
-                <p>
-                  <strong>Phone:</strong> {stepFour.phone}
-                </p>
-                {stepFour.guardianName && stepFour.guardianPhone ? (
-                  <>
-                    <Separator />
-                    <p>
-                      <strong>Guardian Name:</strong> {stepFour.guardianName}
+          <div className="mx-auto space-y-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Step One */}
+              <div className="border rounded-lg p-4 shadow-sm">
+                <h2 className="text-lg font-semibold mb-4">
+                  First step - Personal Info
+                </h2>
+                <div className="flex items-center space-x-4 mb-4">
+                  {avatarUrl ? (
+                    <Avatar className="size-14">
+                      <AvatarImage src={avatarUrl} alt={stepOne.fullName} />
+                      <AvatarFallback>{stepOne.fullName}</AvatarFallback>
+                    </Avatar>
+                  ) : null}
+                  <div>
+                    <p className="info-text">
+                      <span className="info-label">Full Name: </span>
+                      <span className="info-value">{stepOne.fullName}</span>
                     </p>
-                    <p>
-                      <strong>Guardian Phone:</strong> {stepFour.guardianPhone}
+                    <p className="info-text">
+                      <span className="info-label">Email: </span>
+                      <span className="info-value">{stepOne.email}</span>
                     </p>
-                  </>
-                ) : null}
-              </CardContent>
-            </Card>
+                    <p className="info-text">
+                      <span className="info-label">Phone: </span>
+                      <span className="info-value">{stepOne.phone}</span>
+                    </p>
+                  </div>
+                </div>
+                <p className="info-text">
+                  <span className="info-label">Date of Birth: </span>
+                  <span className="info-value">
+                    {new Date(stepOne.dateOfBirth).toLocaleDateString()}
+                  </span>
+                </p>
+              </div>
+
+              {/* Step Two */}
+              <div className="border rounded-lg p-4 shadow-sm">
+                <h2 className="text-lg font-semibold mb-4">
+                  Second step - Job Details
+                </h2>
+                <p className="info-text">
+                  <span className="info-label">Department: </span>
+                  <span className="info-value">{stepTwo.department}</span>
+                </p>
+                <p className="info-text">
+                  <span className="info-label">Position: </span>
+                  <span className="info-value">{stepTwo.position}</span>
+                </p>
+                <p className="info-text">
+                  <span className="info-label">Start Date: </span>
+                  <span className="info-value">
+                    {new Date(stepTwo.startDate).toLocaleDateString()}
+                  </span>
+                </p>
+                <p className="info-text">
+                  <span className="info-label">Job Type: </span>
+                  <span className="info-value">{stepTwo.jobType}</span>
+                </p>
+                <p className="info-text">
+                  <span className="info-label">Salary Expectation: </span>
+                  <span className="info-value">${stepTwo.salaryExpt}</span>
+                </p>
+                <p className="info-text">
+                  <span className="info-label">Manager: </span>
+                  <span className="info-value">{stepTwo.manager}</span>
+                </p>
+              </div>
+
+              {/* Step Three */}
+              <div className="border rounded-lg p-4 shadow-sm">
+                <h2 className="text-lg font-semibold mb-4">
+                  Third step - Skills & Preferences
+                </h2>
+
+                <p className="info-text info-label">Skills:</p>
+                <ul className="list-disc list-inside">
+                  {stepThree.skills.map((skill) => (
+                    <li className="info-value" key={skill}>
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+
+                <p className="info-text info-label">Experience:</p>
+                <ul className="list-disc list-inside">
+                  {Object.entries(stepThree.experience).map(([skill, exp]) => (
+                    <li key={skill}>
+                      <span className="info-label">{skill}: </span>
+                      <span className="info-value">{exp}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <p className="info-text">
+                  <span className="info-label">Preferred Work Time: </span>
+                  <span className="info-value">
+                    {stepThree.preferWorkTime.start} -{" "}
+                    {stepThree.preferWorkTime.end}
+                  </span>
+                </p>
+                <p className="info-text">
+                  <span className="info-label">Remote Preference: </span>
+                  <span className="info-value">{stepThree.remotePrefer}%</span>
+                </p>
+                {stepThree.remotePrefer < 50 && (
+                  <p className="info-text">
+                    <span className="info-label">Manager Approved: </span>
+                    <span className="info-value">
+                      {stepThree.managerApprove ? "Yes" : "No"}
+                    </span>
+                  </p>
+                )}
+                {stepThree.notes && (
+                  <p className="info-text">
+                    <span className="info-label">Notes: </span>
+                    <span className="info-value">{stepThree.notes}</span>
+                  </p>
+                )}
+              </div>
+
+              {/* Step Four */}
+              <div className="border rounded-lg p-4 shadow-sm">
+                <h2 className="text-lg font-semibold mb-4">
+                  Fourth step - Emergency Contact
+                </h2>
+                <p className="info-text">
+                  <span className="info-label">Contact Name: </span>
+                  <span className="info-value">{stepFour.contactName}</span>
+                </p>
+                <p className="info-text">
+                  <span className="info-label">Relationship: </span>
+                  <span className="info-value">{stepFour.relationship}</span>
+                </p>
+                <p className="info-text">
+                  <span className="info-label">Phone: </span>
+                  <span className="info-value">{stepFour.phone}</span>
+                </p>
+                {stepFour.guardianName && (
+                  <p className="info-text">
+                    <span className="info-label">Guardian Name: </span>
+                    <span className="info-value">{stepFour.guardianName}</span>
+                  </p>
+                )}
+                {stepFour.guardianPhone && (
+                  <p className="info-text">
+                    <span className="info-label">Guardian Phone: </span>
+                    <span className="info-value">{stepFour.guardianPhone}</span>
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Confirm button  */}

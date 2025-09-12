@@ -249,9 +249,6 @@
   --tracking-widest: calc(var(--tracking-normal) + 0.1em);
 }
 
-body {
-  letter-spacing: var(--tracking-normal);
-}
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -259,5 +256,18 @@ body {
   body {
     @apply bg-background text-foreground;
     letter-spacing: var(--tracking-normal);
+  }
+}
+@layer components {
+  .info-text {
+    @apply my-1;
+  }
+
+  .info-label {
+    @apply text-base font-semibold tracking-wide;
+  }
+
+  .info-value {
+    @apply text-muted-foreground text-sm;
   }
 }
