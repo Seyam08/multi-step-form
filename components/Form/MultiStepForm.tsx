@@ -5,13 +5,7 @@ import StepOne from "@/components/Form/StepOne/StepOne";
 import StepThree from "@/components/Form/StepThree/StepThree";
 import StepTwo from "@/components/Form/StepTwo/StepTwo";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { stepFourSchema } from "@/schemas/stepFour";
 import { stepOneSchema } from "@/schemas/stepOne";
@@ -65,7 +59,12 @@ export default function MultiStepForm(): JSX.Element {
       </CardHeader>
       <CardContent>
         {step === 0 ? (
-          <StepOne data={data.stepOne} setData={setData} setStep={setStep} />
+          <StepOne
+            step={step}
+            data={data.stepOne}
+            setData={setData}
+            setStep={setStep}
+          />
         ) : step === 1 ? (
           <StepTwo data={data.stepTwo} setData={setData} setStep={setStep} />
         ) : step === 2 ? (
@@ -88,21 +87,13 @@ export default function MultiStepForm(): JSX.Element {
           <Button
             variant="outline"
             size="sm"
-            className="uppercase"
+            className="uppercase cursor-pointer"
             onClick={handlePrev}
           >
             <ChevronLeftIcon /> prev
           </Button>
         )}
       </CardContent>
-      <CardFooter className="flex-col gap-2">
-        {/* <Button type="submit" className="w-full">
-          Login
-        </Button>
-        <Button variant="outline" className="w-full">
-          Login with Google
-        </Button> */}
-      </CardFooter>
     </Card>
   );
 }

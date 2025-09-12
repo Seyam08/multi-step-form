@@ -9,3 +9,16 @@ export type Department = keyof typeof skillsByDepartment;
 export const getSkillsByDepartment = (department: Department): string[] => {
   return skillsByDepartment[department];
 };
+
+export const handlePrev = (
+  setStep: React.Dispatch<React.SetStateAction<number>>,
+  event: React.MouseEvent
+) => {
+  event.preventDefault();
+  return setStep((prev) => (prev > 0 && prev <= 5 ? prev - 1 : prev));
+};
+export const handleNext = (
+  setStep: React.Dispatch<React.SetStateAction<number>>
+) => {
+  return setStep((prev) => (prev >= 0 && prev < 5 ? prev + 1 : prev));
+};

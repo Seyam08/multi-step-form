@@ -16,7 +16,12 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { Department, getSkillsByDepartment } from "@/lib/helper";
+import {
+  Department,
+  getSkillsByDepartment,
+  handleNext,
+  handlePrev,
+} from "@/lib/helper";
 import { stepThreeSchema } from "@/schemas/stepThree";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
@@ -99,12 +104,8 @@ export default function StepThree({
         ...values,
       },
     }));
-    setStep(3);
+    handleNext(setStep);
   }
-  const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setStep((prev) => (prev > 0 && prev <= 5 ? --prev : prev));
-  };
 
   const skillSet = getSkillsByDepartment(department as Department);
 
@@ -301,8 +302,8 @@ export default function StepThree({
             <Button
               variant="outline"
               size="sm"
-              className="uppercase"
-              onClick={handlePrev}
+              className="uppercase cursor-pointer"
+              onClick={(e) => handlePrev(setStep, e)}
             >
               <ChevronLeftIcon /> prev
             </Button>
@@ -310,7 +311,7 @@ export default function StepThree({
               type="submit"
               variant="outline"
               size="sm"
-              className="uppercase"
+              className="uppercase cursor-pointer"
             >
               <ChevronRightIcon /> next
             </Button>

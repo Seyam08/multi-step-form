@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import { handleNext, handlePrev } from "@/lib/helper";
 import { stepFiveSchema } from "@/schemas/stepFive";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
@@ -32,15 +33,12 @@ export default function StepFive({
     resolver: zodResolver(stepFiveSchema),
   });
   function onSubmit(_values: z.infer<typeof stepFiveSchema>) {
-    setStep(5);
+    handleNext(setStep);
     toast("Your form has been submitted", {
       description: "If you reload then information will be cleared!",
     });
   }
-  const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setStep((prev) => (prev > 1 && prev <= 5 ? --prev : prev));
-  };
+
   const { stepOne, stepTwo, stepThree, stepFour } = data;
   return (
     <>
@@ -110,7 +108,7 @@ export default function StepFive({
                   <strong>Skills:</strong> {stepThree.skills.join(", ")}
                 </p>
                 <p>
-                  <strong>Experience:</strong> {stepThree.experience.join(", ")}
+                  {/* <strong>Experience:</strong> {stepThree.experience.join(", ")} */}
                 </p>
                 <p>
                   <strong>Preferred Work Time:</strong>{" "}
@@ -180,8 +178,8 @@ export default function StepFive({
             <Button
               variant="outline"
               size="sm"
-              className="uppercase"
-              onClick={handlePrev}
+              className="uppercase cursor-pointer"
+              onClick={(e) => handlePrev(setStep, e)}
             >
               <ChevronLeftIcon /> prev
             </Button>
@@ -189,7 +187,7 @@ export default function StepFive({
               type="submit"
               variant="outline"
               size="sm"
-              className="uppercase"
+              className="uppercase cursor-pointer"
             >
               <ChevronRightIcon /> next
             </Button>

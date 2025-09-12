@@ -35,7 +35,7 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Slider } from "@/components/ui/slider";
-import { departmentList } from "@/lib/helper";
+import { departmentList, handleNext, handlePrev } from "@/lib/helper";
 import { cn } from "@/lib/utils";
 import { mockManagers } from "@/mock-data/mockManagers";
 import { stepTwoSchema } from "@/schemas/stepTwo";
@@ -101,11 +101,8 @@ export default function StepTwo({
         ...values,
       },
     }));
-    setStep(2);
+    handleNext(setStep);
   }
-  const handlePrev = () => {
-    setStep((prev) => (prev > 0 && prev <= 5 ? --prev : prev));
-  };
 
   return (
     <>
@@ -412,8 +409,8 @@ export default function StepTwo({
             <Button
               variant="outline"
               size="sm"
-              className="uppercase"
-              onClick={handlePrev}
+              className="uppercase cursor-pointer"
+              onClick={(e) => handlePrev(setStep, e)}
             >
               <ChevronLeftIcon /> prev
             </Button>
@@ -421,7 +418,7 @@ export default function StepTwo({
               type="submit"
               variant="outline"
               size="sm"
-              className="uppercase"
+              className="uppercase cursor-pointer"
             >
               <ChevronRightIcon /> next
             </Button>
