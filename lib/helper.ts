@@ -22,3 +22,12 @@ export const handleNext = (
 ) => {
   return setStep((prev) => (prev >= 0 && prev < 5 ? prev + 1 : prev));
 };
+export const is21Plus = (date: Date) => {
+  const today = new Date();
+  const eighteen = new Date(
+    today.getFullYear() - 21,
+    today.getMonth(),
+    today.getDate()
+  );
+  return date <= eighteen;
+};

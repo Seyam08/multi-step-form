@@ -18,35 +18,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { handleNext, handlePrev } from "@/lib/helper";
+import { handleNext, handlePrev, is21Plus } from "@/lib/helper";
+import { relations } from "@/mock-data/relations";
 import { stepFourSchema } from "@/schemas/stepFour";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { JSX, useEffect, useState } from "react";
+import { JSX, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
-const relations = [
-  "Father",
-  "Mother",
-  "Brother",
-  "Sister",
-  "Son",
-  "Daughter",
-  "Husband",
-  "Wife",
-  "Grandfather",
-  "Grandmother",
-];
-const is21Plus = (date: Date) => {
-  const today = new Date();
-  const eighteen = new Date(
-    today.getFullYear() - 21,
-    today.getMonth(),
-    today.getDate()
-  );
-  return date <= eighteen;
-};
 export default function StepFour({
   setData,
   setStep,
@@ -58,33 +38,36 @@ export default function StepFour({
   data: z.infer<typeof stepFourSchema>;
   dob: Date;
 }): JSX.Element {
-  const [showParentInfo, setShowParentInfo] = useState<boolean>(false);
-  const form = useForm<z.infer<typeof stepFourSchema>>({
-    resolver: zodResolver(stepFourSchema),
-    defaultValues: {
-      contactName: "",
-      phone: "",
-      guardianName: "",
-      guardianPhone: "",
-    },
+  const adult = useMemo(() => is21Plus(dob), [dob]);
+  const refineSchema = stepFourSchema.superRefine((data, ctx) => {
+    if (!adult) {
+      if (!data.guardianName) {
+        ctx.addIssue({
+          path: ["guardianName"],
+          code: "custom",
+          message: "Guardian name is required",
+        });
+      }
+      if (!data.guardianPhone) {
+        ctx.addIssue({
+          path: ["guardianPhone"],
+          code: "custom",
+          message: "Guardian phone is required",
+        });
+      }
+    }
   });
 
-  const { setValue } = form;
-
-  useEffect(() => {
-    if (data) {
-      setValue("contactName", data.contactName);
-      setValue("guardianName", data.guardianName);
-      setValue("guardianPhone", data.guardianPhone);
-      setValue("phone", data.phone);
-      setValue("relationship", data.relationship);
-    }
-  }, [data, setValue]);
-
-  useEffect(() => {
-    const adult = is21Plus(dob);
-    setShowParentInfo(adult);
-  }, [dob]);
+  const form = useForm<z.infer<typeof refineSchema>>({
+    resolver: zodResolver(refineSchema),
+    defaultValues: {
+      contactName: data.contactName || "",
+      phone: data.phone || "",
+      guardianName: data.guardianName || "",
+      guardianPhone: data.guardianPhone || "",
+      relationship: data.relationship || undefined,
+    },
+  });
 
   function onSubmit(values: z.infer<typeof stepFourSchema>) {
     setData((prev) => ({
@@ -168,7 +151,7 @@ export default function StepFour({
             />
             {/* Phone end  */}
             {/* Guardian Contact info start  */}
-            {!showParentInfo && (
+            {!adult && (
               <div className="space-y-5">
                 <FormField
                   control={form.control}
