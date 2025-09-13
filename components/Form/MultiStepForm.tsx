@@ -32,7 +32,7 @@ const initialData: Data = {
 export default function MultiStepForm(): JSX.Element {
   const [data, setData] = useState<Data>(initialData);
   const [step, setStep] = useState<number>(0);
-  console.log(JSON.stringify(data));
+
   return (
     <Card className="w-full md:max-w-3xl 2xl:max-w-5xl">
       <CardContent>
