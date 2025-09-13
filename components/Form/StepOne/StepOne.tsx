@@ -18,11 +18,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { handleNext, handlePrev } from "@/lib/helper";
 import { cn } from "@/lib/utils";
 import { stepOneSchema } from "@/schemas/stepOne";
@@ -200,8 +195,8 @@ export default function StepOne({
                     <FormLabel>Profile picture</FormLabel>
                     <FormControl>
                       {fileUrl ? (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
+                        <Popover>
+                          <PopoverTrigger asChild>
                             <Avatar>
                               <AvatarImage
                                 src={fileUrl}
@@ -209,8 +204,8 @@ export default function StepOne({
                               />
                               <AvatarFallback>CN</AvatarFallback>
                             </Avatar>
-                          </TooltipTrigger>
-                          <TooltipContent>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-1">
                             <Button
                               size="sm"
                               className="bg-red-400 hover:bg-red-500 transition-all cursor-pointer text-white shadow-xs"
@@ -218,8 +213,8 @@ export default function StepOne({
                             >
                               <CircleMinus />
                             </Button>
-                          </TooltipContent>
-                        </Tooltip>
+                          </PopoverContent>
+                        </Popover>
                       ) : (
                         <Input
                           id="profilePic"
