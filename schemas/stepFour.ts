@@ -1,3 +1,4 @@
+import { isValidPhoneNumber } from "react-phone-number-input";
 import { z } from "zod";
 
 export const stepFourSchema = z.object({
@@ -11,16 +12,13 @@ export const stepFourSchema = z.object({
     ),
   relationship: z.string({ error: "Please Select the relative!" }),
   phone: z
-    .string({ error: "Please provide a contact number!" })
-    .trim()
-    .regex(/^\+\d{1,3}-\d{3}-\d{3}-\d{4}$/, "Format: +1-123-456-7890"),
+    .string()
+    .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
   guardianName: z.string().optional(),
   guardianPhone: z
     .string()
-    .trim()
     .optional()
-    .refine(
-      (v) => !v || /^\+\d{1,3}-\d{3}-\d{3}-\d{4}$/.test(v),
-      "Format: +1-123-456-7890"
-    ),
+    .refine((val) => !val || isValidPhoneNumber(val), {
+      message: "Invalid phone number",
+    }),
 });

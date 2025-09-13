@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PhoneInput } from "@/components/ui/phone-input";
 import {
   Popover,
   PopoverContent,
@@ -125,9 +126,11 @@ export default function StepOne({
                 <FormItem>
                   <FormLabel>Phone</FormLabel>
                   <FormControl>
-                    <Input placeholder="Phone" {...field} />
+                    <PhoneInput placeholder="Enter a phone number" {...field} />
                   </FormControl>
-                  <FormDescription>e.g. +1-123-456-7890</FormDescription>
+                  <FormDescription>
+                    Select your country, and type your phone number
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

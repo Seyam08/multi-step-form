@@ -1,3 +1,4 @@
+import { isValidPhoneNumber } from "react-phone-number-input";
 import { z } from "zod";
 
 const is18Plus = (date: Date) => {
@@ -25,8 +26,7 @@ export const stepOneSchema = z.object({
   }),
   phone: z
     .string()
-    .trim()
-    .regex(/^\+\d{1,3}-\d{3}-\d{3}-\d{4}$/, "Format: +1-123-456-7890"),
+    .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
   dateOfBirth: z.date().refine(is18Plus, "You must be at least 18 years old"),
   profilePic: z
     .file()

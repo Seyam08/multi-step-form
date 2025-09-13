@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PhoneInput } from "@/components/ui/phone-input";
 import {
   Select,
   SelectContent,
@@ -63,8 +64,8 @@ export default function StepFour({
     defaultValues: {
       contactName: data.contactName || "",
       phone: data.phone || "",
-      guardianName: data.guardianName || "",
-      guardianPhone: data.guardianPhone || "",
+      guardianName: adult ? undefined : data.guardianName || "",
+      guardianPhone: adult ? undefined : data.guardianPhone || "",
       relationship: data.relationship || undefined,
     },
   });
@@ -142,9 +143,11 @@ export default function StepFour({
                 <FormItem>
                   <FormLabel>Phone</FormLabel>
                   <FormControl>
-                    <Input placeholder="Phone" {...field} />
+                    <PhoneInput placeholder="Enter a phone number" {...field} />
                   </FormControl>
-                  <FormDescription>e.g. +1-123-456-7890</FormDescription>
+                  <FormDescription>
+                    Select country, and type phone number
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -174,9 +177,14 @@ export default function StepFour({
                     <FormItem>
                       <FormLabel>Guardian Phone</FormLabel>
                       <FormControl>
-                        <Input placeholder="Phone" {...field} />
+                        <PhoneInput
+                          placeholder="Enter a phone number"
+                          {...field}
+                        />
                       </FormControl>
-                      <FormDescription>e.g. +1-123-456-7890</FormDescription>
+                      <FormDescription>
+                        Select country, and type phone number
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}

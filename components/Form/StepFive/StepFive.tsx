@@ -30,6 +30,9 @@ export default function StepFive({
 }): JSX.Element {
   const form = useForm<z.infer<typeof stepFiveSchema>>({
     resolver: zodResolver(stepFiveSchema),
+    defaultValues: {
+      confirm: false,
+    },
   });
   function onSubmit(_values: z.infer<typeof stepFiveSchema>) {
     handleNext(setStep);
