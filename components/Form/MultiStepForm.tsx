@@ -35,10 +35,10 @@ export default function MultiStepForm(): JSX.Element {
 
   return (
     <Card className="w-full md:max-w-3xl 2xl:max-w-5xl">
-      <CardContent>
+      <CardContent className="px-3 md:px-6">
         <Progress value={step * 20} />
       </CardContent>
-      <CardHeader>
+      <CardHeader className="px-3 md:px-6">
         {step === 0 ? (
           <CardTitle>First step - Personal Info</CardTitle>
         ) : step === 1 ? (
@@ -55,7 +55,7 @@ export default function MultiStepForm(): JSX.Element {
           <CardTitle>There is something wrong!!!</CardTitle>
         )}
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-3 md:px-6">
         {step === 0 ? (
           <StepOne
             step={step}

@@ -52,7 +52,7 @@ export default function StepFive({
           className="max-w-full mx-auto"
         >
           <div className="mx-auto space-y-6 mb-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Step One */}
               <div className="border rounded-lg p-4 shadow-sm">
                 <h2 className="text-lg font-semibold mb-4">
@@ -60,7 +60,7 @@ export default function StepFive({
                 </h2>
                 <div className="flex items-center space-x-4 mb-4">
                   {avatarUrl ? (
-                    <Avatar className="size-14">
+                    <Avatar className="size-8 md:size-14">
                       <AvatarImage src={avatarUrl} alt={stepOne.fullName} />
                       <AvatarFallback>{stepOne.fullName}</AvatarFallback>
                     </Avatar>
