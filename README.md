@@ -6,7 +6,7 @@ A modern, responsive multi-step form built with Next.js 15, TypeScript, Tailwind
 
 ### Live preview
 
-[https://se-yam.netlify.app/](https://talent-seek.netlify.app/)
+https://talent-seek.netlify.app/
 
 ### Installation
 
